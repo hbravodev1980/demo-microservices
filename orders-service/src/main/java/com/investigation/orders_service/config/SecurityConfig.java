@@ -27,9 +27,12 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable)
-                .securityMatcher("/**")
-                .authorizeHttpRequests(authorize -> authorize.anyRequest().authenticated())
-                .oauth2ResourceServer(oauth2 -> oauth2.jwt(jwt -> jwt.jwtAuthenticationConverter(jwtAuthConverter())));
+                .authorizeHttpRequests(auth ->
+                        auth.requestMatchers(request ->
+                                        request.getRequestURI().contains("/actuator/orders")).permitAll()
+                                .anyRequest().authenticated())
+                .oauth2ResourceServer(configure ->
+                        configure.jwt(jwt -> jwt.jwtAuthenticationConverter(jwtAuthConverter())));
         return http.build();
     }
 
