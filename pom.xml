@@ -23,6 +23,7 @@
 	</properties>
 
 	<modules>
+		<module>config-server</module>
 		<module>discovery-server</module>
 		<module>api-gateway</module>
 		<module>inventories-service</module>
@@ -30,9 +31,6 @@
 		<module>products-service</module>
 		<module>notifications-service</module>
 	</modules>
-
-	<dependencies>
-	</dependencies>
 
 	<dependencyManagement>
 		<dependencies>
@@ -45,9 +43,4 @@
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
-
-	<build>
-		<plugins>
-		</plugins>
-	</build>
 </project>
