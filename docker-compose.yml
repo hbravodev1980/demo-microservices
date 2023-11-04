@@ -10,7 +10,7 @@ services:
       POSTGRES_USER: hbravo
       POSTGRES_PASSWORD: test123
     ports:
-      - 5432:5432
+      - "5432:5432"
 
   # MySQL database for Orders
   db-orders:
@@ -23,7 +23,7 @@ services:
       MYSQL_PASSWORD: test123
       MYSQL_ROOT_PASSWORD: root
     ports:
-      - 3306:3306
+      - "3306:3306"
 
   # Postgres database for Products
   db-products:
@@ -35,7 +35,7 @@ services:
       POSTGRES_USER: hbravo
       POSTGRES_PASSWORD: test123
     ports:
-      - 5433:5432
+      - "5433:5432"
 
   # Postgres database for Keycloak
   db-keycloak:
@@ -47,7 +47,7 @@ services:
       POSTGRES_USER: hbravo
       POSTGRES_PASSWORD: test123
     ports:
-      - 5434:5432
+      - "5434:5432"
 
   # keycloak
   keycloak:
@@ -55,7 +55,7 @@ services:
     image: quay.io/keycloak/keycloak:22.0.4
     command: ["start-dev"]
     ports:
-      - 8181:8080
+      - "8181:8080"
     depends_on:
       - db-keycloak
     environment:
