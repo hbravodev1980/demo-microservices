@@ -1,15 +1,7 @@
 package com.investigation.orders_service.model.dtos;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
 import java.util.List;
 
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
-public class OrderRequest {
+public record OrderRequest(List<OrderItemRequest> orderItemRequests) {
 
-    private List<OrderItemRequest> orderItemRequests;
 }

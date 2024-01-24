@@ -1,19 +1,5 @@
 package com.investigation.products_service.model.dtos;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+public record ProductRequest(String sku, String name, String description, Double price, Boolean status) {
 
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
-public class ProductRequest {
-
-    private String sku;
-    private String name;
-    private String description;
-    private Double price;
-    private Boolean status;
 }

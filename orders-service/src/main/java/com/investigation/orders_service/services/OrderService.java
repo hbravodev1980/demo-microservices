@@ -14,6 +14,7 @@ import com.investigation.orders_service.utils.JsonUtils;
 import io.micrometer.observation.Observation;
 import io.micrometer.observation.ObservationRegistry;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -23,12 +24,15 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class OrderService {
 
     private final OrderRepository orderRepository;
     private final WebClient.Builder webClientBuilder;
     private final KafkaTemplate<String, String> kafkaTemplate;
     private final ObservationRegistry observationRegistry;
+
+    private final static String ORDERS_TOPIC = "orders-topic";
 
     public OrderResponse placeOrder(OrderRequest orderRequest) {
         Observation inventoriesObservation = Observation.createNotStarted("inventories-service", observationRegistry);
@@ -37,7 +41,7 @@ public class OrderService {
             BaseResponse result = webClientBuilder.build()
                     .post()
                     .uri("lb://inventories-service/api/inventories/in-stock")
-                    .bodyValue(orderRequest.getOrderItemRequests())
+                    .bodyValue(orderRequest.orderItemRequests())
                     .retrieve()
                     .bodyToMono(BaseResponse.class)
                     .block();
@@ -47,16 +51,20 @@ public class OrderService {
             }
             Order order = new Order();
             order.setOrderNumber(UUID.randomUUID().toString());
-            order.setOrderItems(orderRequest.getOrderItemRequests().stream()
+            order.setOrderItems(orderRequest.orderItemRequests().stream()
                     .map(orderItemRequest -> mapToOrderItem(orderItemRequest, order))
                     .toList());
 
             Order savedOrder = orderRepository.save(order);
+            log.info("Order number {} with {} item(s) saved", savedOrder.getOrderNumber(), savedOrder.getOrderItems().size());
 
             // TODO: Send message to order topic
-            kafkaTemplate.send("orders-topic",
+            log.info("Sending order number {} to queque {}", savedOrder.getOrderNumber(), ORDERS_TOPIC);
+
+            kafkaTemplate.send(ORDERS_TOPIC,
                     JsonUtils.toJson(new OrderEvent(savedOrder.getOrderNumber(),
                             savedOrder.getOrderItems().size(), OrderStatus.PLACED)));
+
             return mapToOrderResponse(savedOrder);
         });
     }
@@ -86,10 +94,10 @@ public class OrderService {
 
     private OrderItem mapToOrderItem(OrderItemRequest orderItemRequest, Order order) {
         return OrderItem.builder()
-                .id(orderItemRequest.getId())
-                .sku(orderItemRequest.getSku())
-                .price(orderItemRequest.getPrice())
-                .quantity(orderItemRequest.getQuantity())
+                .id(orderItemRequest.id())
+                .sku(orderItemRequest.sku())
+                .price(orderItemRequest.price())
+                .quantity(orderItemRequest.quantity())
                 .order(order)
                 .build();
     }

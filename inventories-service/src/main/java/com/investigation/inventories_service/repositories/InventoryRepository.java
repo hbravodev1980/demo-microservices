@@ -1,6 +1,6 @@
-package com.investigation.inventory_service.repositories;
+package com.investigation.inventories_service.repositories;
 
-import com.investigation.inventory_service.model.entities.Inventory;
+import com.investigation.inventories_service.model.entities.Inventory;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

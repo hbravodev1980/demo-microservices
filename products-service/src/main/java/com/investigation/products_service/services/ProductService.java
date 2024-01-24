@@ -19,11 +19,11 @@ public class ProductService {
 
     public void addProduct(ProductRequest productRequest) {
         Product product = Product.builder()
-                .sku(productRequest.getSku())
-                .name(productRequest.getName())
-                .description(productRequest.getDescription())
-                .price(productRequest.getPrice())
-                .status(productRequest.getStatus())
+                .sku(productRequest.sku())
+                .name(productRequest.name())
+                .description(productRequest.description())
+                .price(productRequest.price())
+                .status(productRequest.status())
                 .build();
 
         productRepository.save(product);
@@ -36,13 +36,12 @@ public class ProductService {
     }
 
     private ProductResponse mapToProductResponse(Product product) {
-        return ProductResponse.builder()
-                .id(product.getId())
-                .sku(product.getSku())
-                .name(product.getName())
-                .description(product.getDescription())
-                .price(product.getPrice())
-                .status(product.getStatus())
-                .build();
+        return new ProductResponse(
+                product.getId(),
+                product.getSku(),
+                product.getName(),
+                product.getDescription(),
+                product.getPrice(),
+                product.getStatus());
     }
 }

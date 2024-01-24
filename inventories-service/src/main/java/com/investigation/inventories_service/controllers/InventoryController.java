@@ -1,8 +1,8 @@
-package com.investigation.inventory_service.controllers;
+package com.investigation.inventories_service.controllers;
 
-import com.investigation.inventory_service.model.dtos.BaseResponse;
-import com.investigation.inventory_service.model.dtos.OrderItemRequest;
-import com.investigation.inventory_service.services.InventoryService;
+import com.investigation.inventories_service.model.dtos.BaseResponse;
+import com.investigation.inventories_service.model.dtos.OrderItemRequest;
+import com.investigation.inventories_service.services.InventoryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;

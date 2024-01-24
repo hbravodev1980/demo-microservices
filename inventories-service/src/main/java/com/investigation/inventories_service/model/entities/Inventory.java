@@ -1,4 +1,4 @@
-package com.investigation.inventory_service.model.entities;
+package com.investigation.inventories_service.model.entities;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
